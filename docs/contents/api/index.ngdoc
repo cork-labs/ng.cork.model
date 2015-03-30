@@ -11,5 +11,8 @@ If you want to know how **ng.cork.models** works, checkout the {@link guide/ gui
 
 ## Modules
 
-- **[ng.cork.models](#/api/ng.cork.models)** - Provides base classes to generate and store model factories and an abstract model class.
+- **[ng.cork.models](#/api/ng.cork.models)** - Main module, requires all other modules.
+- **[ng.cork.models.models](#/api/ng.cork.models.models)** - Provides a base classes to store and retrieve model factories.
+- **[ng.cork.models.model](#/api/ng.cork.models.model)** - Provides a base class for models.
+- **[ng.cork.models.factory](#/api/ng.cork.models.factory)** - Provides a service that generates model factories.
 

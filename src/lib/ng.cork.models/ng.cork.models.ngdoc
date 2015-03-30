@@ -2,85 +2,24 @@
 @name ng.cork.models
 @description
 
-> Provides a base classes to store and retrieve model factories.
+> Main module, requires all other modules.
 
 # Dependencies
 
-- None.
-
+- module **[ng.cork.models.models](#/api/ng.cork.models.models)** - Provides a base classes to store and retrieve model factories.
+- module **[ng.cork.models.model](#/api/ng.cork.models.model)** - Provides a base class for models.
+- module **[ng.cork.models.factory](#/api/ng.cork.models.factory)** - Provides a service that generates model factories.
 
 # Usage
 
-
-## CorkModels
-
-> Register and retrieve model factories.
-
-Create one or more singleton services based on the {@link ng.cork.models.CorkModels CorkModels} class.
+Add this module as a dependency of your modules.
 
 <pre>
-angular.module('app', ['ng.cork.models'])
-.service('myApiModels', [
-    'CorkModels',
-    function (CorkModels) {
-        return new CorkModels();
-    }
-]);
+angular.module('app', ['ng.cork.models']);
 </pre>
 
-If you want, inherit from {@link ng.cork.models.CorkModels} and add your own functionalty.
+Use this module as a dependency if you are using the entire library.
 
-<pre>
-angular.module('app', ['ng.cork.models'])
-.service('myApiModels', [
-    'CorkModels',
-    function (CorkModels) {
-        var MyApiModels = function () {
-            CorkModels.call(this);
-        };
-        MyApiModels.prototype = Object.create(CorkModels.protoype);
-        MyApiModels.prototype.constructor = MyApiModels;
-        return new MyApiModels();
-    }
-]);
-</pre>
+You may otherwise wish to include just the modules you are using.
 
-Register one or mode model classes per instance of {@link ng.cork.models.CorkModels CorkModels}.
-
-<pre>
-angular.module('app', ['ng.cork.models'])
-.run([
-    'myApiModels',
-    'corkModelFactory',
-    function(() {
-        // by providing the name of an AngularJS service that returns a constructor
-        myApiModels.model('user', 'MyUser');
-        // by providing your own factory function
-        myApiModels.model('post', function (data) {
-            return new Post(data);
-        });
-        // by generating a factory function using corkModelFactory
-        myApiModels.model('post', corkModelFactory({
-            $constructor: CorkModel,
-            name: 'post',
-            service 'myApiServicePost',
-            methods: ['load', 'save', 'delete']
-        }));
-    }
-]);
-</pre>
-
-Create instances of your models from anywhere by injecting your model service(s).
-
-<pre>
-angular.module('app', ['ng.cork.models'])
-.controller('myController', [
-    'myApiModels',
-    function(() {
-        // create pristine instances
-        $scope.post = myApiModels.model('post').$new();
-        // or provide data to initialize them
-        $scope.post = myApiModels.model('post').$new({ ... some data ... });
-    }
-]);
-</pre>
+See {@link #/guide Guide} to learn about file cherry-picking.

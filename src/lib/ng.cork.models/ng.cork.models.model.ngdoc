@@ -1,5 +1,5 @@
 @ngdoc overview
-@name ng.cork.models.model
+@name ng.cork.models.model.model
 @description
 
 > Provides a base class for models.
@@ -11,13 +11,21 @@
 
 # Usage
 
-
-## CorkModel
-
-Use the {@link ng.cork.models.CorkModel CorkModel} as a base to your model classes.
+Add the module as a dependency.
 
 <pre>
-angular.module('app', ['ng.cork.models'])
+angular.module('app', ['ng.cork.models.model']);
+</pre>
+
+**NOTE:** this is a partial module. Use `ng.cork.models` instead to include the entire library.
+
+
+## [CorkModel](#/api/ng.cork.models.model.CorkModel)
+
+Use the {@link ng.cork.models.model.CorkModel CorkModel} as a base to your model classes.
+
+<pre>
+angular.module('app', ['ng.cork.models.model'])
 .factory('MyUser', [
     'CorkModel',
     function (CorkModel) {
@@ -42,7 +50,7 @@ angular.module('app', ['ng.cork.models'])
 Inject your model constructors to create instances of them.
 
 <pre>
-angular.module('app', ['ng.cork.models'])
+angular.module('app', ['ng.cork.models.model'])
 .controller('myController', [
     'MyUser',
     function (MyUser) {

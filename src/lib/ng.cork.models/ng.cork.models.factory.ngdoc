@@ -1,5 +1,5 @@
 @ngdoc overview
-@name ng.cork.models.factory
+@name ng.cork.models.factory.factory
 @description
 
 > Provides a service that generates model factories which can attach service methods to every model instance.
@@ -11,12 +11,21 @@
 
 # Usage
 
-## corkModelFactory
+Add the module as a dependency.
+
+<pre>
+angular.module('app', ['ng.cork.models.factory']);
+</pre>
+
+**NOTE:** this is a partial module. Use `ng.cork.models` instead to include the entire library.
+
+
+## [corkModelFactory](#/api/ng.cork.models.factory.corkModelFactory)
 
 Generate model factories by providing a definition.
 
 <pre>
-angular.module('app', ['ng.cork.models'])
+angular.module('app', ['ng.cork.models.factory'])
 .controller('myController', [
     'corkModelFactory',
     function (corkModelFactory) {
@@ -39,15 +48,21 @@ angular.module('app', ['ng.cork.models'])
 ]);
 </pre>
 
-Register your model factories in an instance of {@link ng.cork.models.CorkModels CorkModels} to be able to create model
+Register your model factories in an instance of {@link ng.cork.models.model.CorkModels CorkModels} to be able to create model
 instances from any part of your app.
 
 <pre>
-angular.module('app', ['ng.cork.models'])
+angular.module('app', ['ng.cork.models.factory'])
+.service('myApiModels', [
+    'CorkModels',
+    function (CorkModels) {
+        return new CorkModels();
+    }
+])
 .run([
     'corkModelFactory',
     'myApiModels',
-    function (corkModelFactory) {
+    function (corkModelFactory, myApiModels) {
         myApiModels.model('user', corkModelFactory({ ... }));
         myApiModels.model('post', corkModelFactory({ ... }));
         myApiModels.model('tag', corkModelFactory({ ... }));
