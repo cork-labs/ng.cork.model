@@ -1,0 +1,15 @@
+@ngdoc overview
+@name API Reference
+@description
+
+# ng.cork.models API Reference
+
+> Welcome to the **ng.cork.models** API reference.
+
+If you want to know how **ng.cork.models** works, checkout the {@link guide/ guide} and the {@link demos/ demos}.
+
+
+## Modules
+
+- **[ng.cork.models](#/api/ng.cork.models)** - Provides base classes to generate and store model factories and an abstract model class.
+
