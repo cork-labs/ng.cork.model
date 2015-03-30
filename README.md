@@ -23,7 +23,7 @@ $ npm install --save ng.cork.models
 
 
 Include the following JS files in your build:
--
+- `dist/ng.cork.models.js` OR `dist/ng.cork.models.min.js`
 
 
 ## Documentation
