@@ -25,6 +25,11 @@ $ npm install --save ng.cork.models
 Include the following JS files in your build:
 - `dist/ng.cork.models.js` OR `dist/ng.cork.models.min.js`
 
+Alternatively, include only the files you absolutely need.
+- `dist/ng.cork.models.js` - a base classes to store and retrieve model factories.
+- `dist/ng.cork.models.model.js` - a base class for models.
+- `dist/ng.cork.models.factory.js` - a service that generates model factories which can attach service methods to every model instance.
+
 
 ## Documentation
 

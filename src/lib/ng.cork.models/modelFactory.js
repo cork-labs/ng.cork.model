@@ -22,18 +22,28 @@
 
     function normalizeModel(name, model) {
 
+        var hasConstructor;
+        var hasNew;
+        var isValidConstructor;
+        var isValidNew;
+
         if (!isObjectObject(model)) {
             throw new Error('Invalid options for model "' + name + '".');
         } else {
             model = copy(model);
             model.name = name;
-            if (!isString(model.$constructor) && !isFunction(model.$constructor)) {
-                throw new Error('Invalid "constructor" in options for model "' + name + '".');
+
+            hasConstructor = model.hasOwnProperty('$constructor');
+            hasNew = model.hasOwnProperty('$new');
+            isValidConstructor = hasConstructor && (isString(model.$constructor) || isFunction(model.$constructor));
+            isValidNew = hasNew && isFunction(model.$new);
+            if (hasConstructor && !isValidConstructor || hasNew && !isValidNew || !hasNew && !hasConstructor) {
+                throw new Error('Invalid "$constructor" or "$new" in options for model "' + name + '".');
             }
         }
         model.service = model.service || null;
-        model.methods = model.methods || [];
-        if (!isArray(model.methods)) {
+        model.methods = model.methods || {};
+        if (!isObjectObject(model.methods)) {
             throw new Error('Invalid "methods" in options for model "' + name + '".');
         }
         return model;
@@ -45,18 +55,18 @@
         var key;
         for (key in methods) {
             method = methods[key];
-            if (isString(method)) {
+            if (method === null || isString(method) || isFunction(method)) {
                 method = methods[key] = {
-                    name: method
+                    method: method
                 };
-            }
-            if (!isObject(method)) {
+            } else if (!isObject(method)) {
                 throw new Error('Invalid options for method of model "' + model.name + '".');
             }
-            if (!method.name || !isString(method.name) || !method.name.length) {
-                throw new Error('Invalid "name" in options for method "undefined" of model "' + model.name + '".');
+            method.name = key;
+            if (!isString(method.name) || !method.name.length) {
+                throw new Error('Invalid method name in options of model "' + model.name + '".');
             }
-            if (method.hasOwnProperty('method') && !isFunction(method.method) && !isString(method.method)) {
+            if (method.hasOwnProperty('method') && method.method !== null && !isFunction(method.method) && !isString(method.method)) {
                 throw new Error('Invalid "method" in options for method "' + method.name + '" of model "' + model.name + '".');
             }
             if (!isFunction(method.method)) {
@@ -71,15 +81,24 @@
     }
 
     function makeModelFactory($injector, model) {
-        var factory = function $new(data) {
-            if (isString(model.$constructor)) {
-                model.$constructor = $injector.get(model.$constructor);
-            }
-            var Constructor = model.$constructor;
-            var instance = new Constructor(data);
-            attachModelMethods($injector, model, instance);
-            return instance;
-        };
+        var factory;
+        if (model.$new) {
+            factory = function $new(data) {
+                var instance = model.$new(data);
+                attachModelMethods($injector, model, instance);
+                return instance;
+            };
+        } else {
+            factory = function (data) {
+                if (isString(model.$constructor)) {
+                    model.$constructor = $injector.get(model.$constructor);
+                }
+                var Constructor = model.$constructor;
+                var instance = new Constructor(data);
+                attachModelMethods($injector, model, instance);
+                return instance;
+            };
+        }
         factory.model = model;
         return factory;
     }
@@ -87,10 +106,10 @@
     function attachModelMethods($injector, model, instance) {
         var methods = model.methods;
         var method;
-        var ix;
+        var key;
         var boundFn;
-        for (ix = 0; ix < methods.length; ix++) {
-            method = methods[ix];
+        for (key in methods) {
+            method = methods[key];
             if (isFunction(method.method)) {
                 boundFn = angular.bind(instance, method.method);
             } else {
@@ -133,10 +152,42 @@
         '$injector',
         function corkModelFactory($injector) {
 
-            return function corkModelFactory(name, model) {
-                model = normalizeModel(name, model);
-                normalizeModelMethods(model);
-                return makeModelFactory($injector, model);
+            return {
+
+                /**
+                 * @ngdoc function
+                 * @name make
+                 * @methodOf ng.cork.models.factory.corkModelFactory
+                 *
+                 * @description
+                 * Returns a function that generates instances of a particlar model.
+                 *
+                 * It is capable of taking a
+                 *
+                 *
+                 * @param {string} name The model's name, ex: 'user'
+                 * @param {object} model The model definition.
+                 *
+                 *      {
+                 *          $constructor: <string|function>,
+                 *          service: <object|string>,
+                 *          methods: {
+                 *              save: function () { },
+                 *              load: <string>,
+                 *              update: {
+                 *                  service: <object|string>
+                 *                  method: <string>,
+                 *                  xyz: <string>,
+                 *              },
+                 *              delete: null
+                 *          },
+                 *      }
+                 */
+                make: function make(name, model) {
+                    model = normalizeModel(name, model);
+                    normalizeModelMethods(model);
+                    return makeModelFactory($injector, model);
+                }
             };
         }
     ]);

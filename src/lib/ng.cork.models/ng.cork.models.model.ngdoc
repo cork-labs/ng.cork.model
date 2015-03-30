@@ -1,0 +1,55 @@
+@ngdoc overview
+@name ng.cork.models.model
+@description
+
+> Provides a base class for models.
+
+# Dependencies
+
+- None.
+
+
+# Usage
+
+
+## CorkModel
+
+Use the {@link ng.cork.models.CorkModel CorkModel} as a base to your model classes.
+
+<pre>
+angular.module('app', ['ng.cork.models'])
+.factory('MyUser', [
+    'CorkModel',
+    function (CorkModel) {
+        var MyUser = function () {
+            CorkModel.call(this);
+            // add your methods and properties
+            this.foo = function () {
+                // ... some logic ...
+            };
+            // costumize the $decorate hook
+            this.$decorate = function (data) {
+                // ... something to instance based on the new data
+            };
+        };
+        MyUser.prototype = Object.create(CorkModel.protoype);
+        MyUser.prototype.constructor = MyUser;
+        return MyUser;
+    }
+]);
+</pre>
+
+Inject your model constructors to create instances of them.
+
+<pre>
+angular.module('app', ['ng.cork.models'])
+.controller('myController', [
+    'MyUser',
+    function (MyUser) {
+        var user = new MyUser({ ... some data ... });
+        user.$merge({ ... more data ... });
+        user.$replace({ ... other data ... });
+        user.$empty();
+    }
+]);
+</pre>

@@ -1,8 +1,8 @@
 @ngdoc overview
-@name ng.cl.models
+@name ng.cork.models
 @description
 
-> Provides base classes to generate and store model factories and an abstract model class.
+> Provides a base classes to store and retrieve model factories.
 
 # Dependencies
 
@@ -16,10 +16,10 @@
 
 > Register and retrieve model factories.
 
-Create one or more singleton services based on the {@link ng.cl.models.CorkModels CorkModels} class.
+Create one or more singleton services based on the {@link ng.cork.models.CorkModels CorkModels} class.
 
 <pre>
-angular.module('app', ['ng.cl.models'])
+angular.module('app', ['ng.cork.models'])
 .service('myApiModels', [
     'CorkModels',
     function (CorkModels) {
@@ -28,10 +28,10 @@ angular.module('app', ['ng.cl.models'])
 ]);
 </pre>
 
-If you want, inherit from {@link ng.cl.models.CorkModels} and add your own functionalty.
+If you want, inherit from {@link ng.cork.models.CorkModels} and add your own functionalty.
 
 <pre>
-angular.module('app', ['ng.cl.models'])
+angular.module('app', ['ng.cork.models'])
 .service('myApiModels', [
     'CorkModels',
     function (CorkModels) {
@@ -45,10 +45,10 @@ angular.module('app', ['ng.cl.models'])
 ]);
 </pre>
 
-Register one or mode model classes per instance of {@link ng.cl.models.CorkModels CorkModels}.
+Register one or mode model classes per instance of {@link ng.cork.models.CorkModels CorkModels}.
 
 <pre>
-angular.module('app', ['ng.cl.models'])
+angular.module('app', ['ng.cork.models'])
 .run([
     'myApiModels',
     'corkModelFactory',
@@ -73,7 +73,7 @@ angular.module('app', ['ng.cl.models'])
 Create instances of your models from anywhere by injecting your model service(s).
 
 <pre>
-angular.module('app', ['ng.cl.models'])
+angular.module('app', ['ng.cork.models'])
 .controller('myController', [
     'myApiModels',
     function(() {
@@ -81,101 +81,6 @@ angular.module('app', ['ng.cl.models'])
         $scope.post = myApiModels.model('post').$new();
         // or provide data to initialize them
         $scope.post = myApiModels.model('post').$new({ ... some data ... });
-    }
-]);
-</pre>
-
-
-## CorkModel
-
-> A base class for models.
-
-Use the {@link ng.cl.models.CorkModel CorkModel} as a base to your model classes.
-
-<pre>
-angular.module('app', ['ng.cl.models'])
-.factory('MyUser', [
-    'CorkModel',
-    function (CorkModel) {
-        var MyUser = function () {
-            CorkModel.call(this);
-            // add your methods and properties
-            this.foo = function () {
-                // ... some logic ...
-            };
-            // costumize the $decorate hook
-            this.$decorate = function (data) {
-                // ... something to instance based on the new data
-            };
-        };
-        MyUser.prototype = Object.create(CorkModel.protoype);
-        MyUser.prototype.constructor = MyUser;
-        return MyUser;
-    }
-]);
-</pre>
-
-Inject your model constructors to create instances of them.
-
-<pre>
-angular.module('app', ['ng.cl.models'])
-.controller('myController', [
-    'MyUser',
-    function (MyUser) {
-        var user = new MyUser({ ... some data ... });
-        user.$merge({ ... more data ... });
-        user.$replace({ ... other data ... });
-        user.$empty();
-    }
-]);
-</pre>
-
-
-## corkModelFactory
-
-> A service fn for generating model factories that attach service methods to every model instance.
-
-Generate model factories by providing a definition.
-
-<pre>
-angular.module('app', ['ng.cl.models'])
-.controller('myController', [
-    'corkModelFactory',
-    function (corkModelFactory) {
-        var userFactory = corkModelFactory({
-            $constructor: CorkModel,
-            name: 'post',
-            service 'myApiServicePost',
-            methods: ['load', 'save', 'delete']
-        });
-
-        var user = userFactory($scope.data);
-
-        // will invoke myApiServicePost.delete() providing the user instance as an argument
-        user.delete().then( ... );
-    }
-]);
-</pre>
-
-Register your model factories in an instance of {@link ng.cl.models.CorkModels CorkModels} to be able to create model
-instances from any part of your app.
-
-<pre>
-angular.module('app', ['ng.cl.models'])
-.run([
-    'corkModelFactory',
-    'myApiModels',
-    function (corkModelFactory) {
-        myApiModels.model('user', corkModelFactory({ ... }));
-        myApiModels.model('post', corkModelFactory({ ... }));
-        myApiModels.model('tag', corkModelFactory({ ... }));
-    }
-])
-.controller('myController', [
-    'myApiModels',
-    function (myApiModels) {
-        $scope.user = myApiModels.model('user').$new({ ... some data ... });
-        $scope.post = myApiModels.model('user').$new();
     }
 ]);
 </pre>
