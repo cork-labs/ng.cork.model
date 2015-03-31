@@ -1,63 +1,12 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.models.models', []);
+    var module = angular.module('ng.cork.models.models', ['ng.cork.util']);
+
     var copy = angular.copy;
 
     var isString = angular.isString;
-    var isDate = angular.isDate;
     var isFunction = angular.isFunction;
-    var isObject = angular.isObject;
-    var isArray = angular.isArray;
-
-    function isObjectObject(value) {
-        return value !== null && angular.isObject(value) && !angular.isArray(value);
-    }
-
-    function isRegExp(value) {
-        return window.toString.call(value) === '[object RegExp]';
-    }
-
-    function isPromise(value) {
-        return value && isFunction(value.then);
-    }
-
-    /**
-     * @param {object} destination
-     * @param {object} source
-     * @return {object}
-     */
-    function extend(destination, source) {
-        // bailout
-        if (destination !== source) {
-            // handles dates and regexps
-            if (isDate(source)) {
-                destination = new Date(source.getTime());
-            } else if (isRegExp(source)) {
-                destination = new RegExp(source.source, source.toString().match(/[^\/]*$/)[0]);
-                destination.lastIndex = source.lastIndex;
-            }
-            // if source is object (or array) go recursive
-            else if (isObject(source)) {
-                // initialize as (or smash to) destination property to Array
-                if (isArray(source)) {
-                    if (!isArray(destination)) {
-                        destination = [];
-                    }
-                }
-                // initialize as (or smash to) destination property to Object
-                else if (!isObject(destination) || isArray(destination)) {
-                    destination = {};
-                }
-                for (var key in source) {
-                    destination[key] = extend(destination[key], source[key]);
-                }
-            } else if (typeof source !== 'undefined') {
-                destination = source;
-            }
-        }
-        return destination;
-    }
 
     /**
      * @ngdoc object
@@ -70,7 +19,8 @@
      */
     module.factory('CorkModels', [
         '$injector',
-        function CorkModelsFactory($injector) {
+        'corkUtil',
+        function CorkModelsFactory($injector, corkUtil) {
 
             /**
              * @type {object} default configuration
@@ -80,7 +30,7 @@
             var CorkModels = function (config) {
                 var self = this;
 
-                config = extend(copy(defaults), config || {});
+                config = corkUtil.extend(copy(defaults), config || {});
 
                 /**
                  * @type {object} stores model factories
@@ -145,23 +95,6 @@
                     }
                 };
             };
-
-            // -- static util
-
-            /**
-             * @ngdoc function
-             * @name extend
-             * @methodOf ng.cork.models.models.CorkModels
-             *
-             * @description
-             * Static deep merge utility function.
-             *
-             * @param {*} destination The object to extend. If a scalar value is provided and `source` is object or an
-             *   array you will get a new object returned, otherwise the destination is modified and you can ignore the return value.
-             * @param {*} source The source object.
-             * @returns {object} The extended object.
-             */
-            CorkModels.extend = extend;
 
             return CorkModels;
         }

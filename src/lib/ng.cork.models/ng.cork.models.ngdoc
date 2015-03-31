@@ -10,6 +10,7 @@
 - module **[ng.cork.models.model](#/api/ng.cork.models.model)** - Provides a base class for models.
 - module **[ng.cork.models.factory](#/api/ng.cork.models.factory)** - Provides a service that generates model factories.
 
+
 # Usage
 
 Add this module as a dependency of your modules.

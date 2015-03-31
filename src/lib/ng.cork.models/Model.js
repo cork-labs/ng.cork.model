@@ -1,64 +1,9 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.models.model', []);
-
-    var copy = angular.copy;
+    var module = angular.module('ng.cork.models.model', ['ng.cork.util']);
 
     var isString = angular.isString;
-    var isDate = angular.isDate;
-    var isFunction = angular.isFunction;
-    var isObject = angular.isObject;
-    var isArray = angular.isArray;
-
-    function isObjectObject(value) {
-        return value !== null && angular.isObject(value) && !angular.isArray(value);
-    }
-
-    function isRegExp(value) {
-        return window.toString.call(value) === '[object RegExp]';
-    }
-
-    function isPromise(value) {
-        return value && isFunction(value.then);
-    }
-
-    /**
-     * @param {object} destination
-     * @param {object} source
-     * @return {object}
-     */
-    function extend(destination, source) {
-        // bailout
-        if (destination !== source) {
-            // handles dates and regexps
-            if (isDate(source)) {
-                destination = new Date(source.getTime());
-            } else if (isRegExp(source)) {
-                destination = new RegExp(source.source, source.toString().match(/[^\/]*$/)[0]);
-                destination.lastIndex = source.lastIndex;
-            }
-            // if source is object (or array) go recursive
-            else if (isObject(source)) {
-                // initialize as (or smash to) destination property to Array
-                if (isArray(source)) {
-                    if (!isArray(destination)) {
-                        destination = [];
-                    }
-                }
-                // initialize as (or smash to) destination property to Object
-                else if (!isObject(destination) || isArray(destination)) {
-                    destination = {};
-                }
-                for (var key in source) {
-                    destination[key] = extend(destination[key], source[key]);
-                }
-            } else if (typeof source !== 'undefined') {
-                destination = source;
-            }
-        }
-        return destination;
-    }
 
     /**
      * @ngdoc object
@@ -68,8 +13,10 @@
      * Abstract class for models, provides data encapuslation.
      */
     module.factory('CorkModel', [
+        'corkUtil',
+        function CorkModelFactory(corkUtil) {
 
-        function CorkModelFactory() {
+            var extend = corkUtil.extend;
 
             /**
              * @ngdoc method
