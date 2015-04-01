@@ -136,120 +136,153 @@
      * @name ng.cork.model.factory.corkModelFactory
      *
      * @description
-     * Provides a way to generates model factories from an options object.
+     * Generates model factories from a definition object.
      *
      * Generated factories can:
      * - create instances from a provided factory function or an injectable Constructor.
      * - decorate instances with ad-hoc functions or methods of one or more injectable services.
      *
-     * # Model Options
+     * # $new(options)
      *
-     * Object need to contain at least a `$new` or `$constructor` property.
+     * <pre>
+     * var userFactory = corkModelFactory.$new('user', ... options ... );
+     * </pre>
+     *
+     * Provide an object with a valid `$constructor` property or a `$new` delegate.
      *
      * ```
+     * // equivalent
      * {$constructor: 'MyUser'}
      * {$new: function (data) { return new MyUser(data); }}
      * ```
      *
-     * > **options.$constructor** *function|string*
+     * ## **options.$constructor** *function|string*
+     *
+     * Create instance via `= new Constructor(data)`.
      *
      * If provided, factory will create instances via `instance = new $constructor(data)`.
      *
      * Provide a `function` to be used as constructor
      *
-     * ```
+     * <pre>
      * var options = {
      *   $constructor: function MyUser() {}
      * }
-     * ```
+     * </pre>
      *
      * Or a `string` that resolves to a function via AngularJS injection.
      *
-     * ```
+     * <pre>
      * var options = {
      *   $constructor: 'MyUser'
      * }
-     * ```
+     * </pre>
      *
-     * > **options.$new** *function*
+     * ## **options.$new** *function*
      *
-     * If provided, `$constructor` is ignored and factor wil create instances via `instance = $new(data)`.
+     * Delegate creation of instances to this function: `instance = $new(data)`.
+     *
+     * If provided, `$constructor` is ignored.
      *
      * Provide a `function` that returns new instances of the model.
      *
-     * ```
+     * <pre>
      * var options = {
      *   $new: function (data) {
      *     return new MyUser(data);
      *   }
      * }
-     * ```
+     * </pre>
      *
-     * > **options.service** *object|string*
+     * ## **options.service** *object|string*
      *
-     * If provided, all methods will be invoked on this service, except methods provided as `Function () {}` or methods that reference a service.
+     * Decorate instances with some methods of this service.
      *
      * Provide an `object` with the service instance or a `string` that resolves to a service via AngularJS injection.
      *
-     * > **options.methods** *object*
-     *
-     * Provide an `object` map of methods to attach to the instances.
-     *
-     * ```
+     * <pre>
      * var options = {
      *   $constructor: 'MyUser',
+     *   service: 'myService'
+     * }
+     * </pre>
+     *
+     * ## **options.methods** *object*
+     *
+     * Provide an `object` map of methods you wish to attach to the instances.
+     *
+     * <pre>
+     * var options = {
+     *   $constructor: 'MyUser',
+     *   service: 'myService',
      *   methods: {
      *      load: 'get',
-     *      save: ...
+     *      save: function ...
+     *      delete: { ... }
      *   }
      * }
-     * ```
+     * var userFactory = corkModelFactory.$new('user', options);
+     * </pre>
      *
-     * For each method the key will become the `methodName` attached to the model instances.
+     * The object keys will become the method `name`, as attached to the model instances.
      *
-     * ```
-     * var factory = corkModelFactory('user', options); // function $new(data) {}
-     * ```
+     * <pre>
+     * var user = userFactory({id: 1});
+     * user.load().then( ... );
+     * user.save().then( ... );
+     * </pre>
      *
-     * > **options.methods[methodName]** *null|string|function|object*
+     * ## **options.methods[name]** *null|string|function|object*
      *
      * If the value is `null`, the method in the provided `model.service` will be invoked by the same name.
      *
-     *     // options.methods.foo = null;
-     *     instance.foo(1, 2) => service.foo(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = null;
+     * instance.foo(1, 2); // => service.foo(instance, 1, 2)
+     * </pre>
      *
-     * If method is a `string`, the method in the provided `options.service` will be invoked by this other name.
+     * If it is a `string`, the method in the provided `options.service` will be invoked by this other name.
      *
-     *     // options.methods.foo = bar;
-     *     instance.foo(1, 2) => service.bar(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = bar;
+     * instance.foo(1, 2); // => service.bar(instance, 1, 2)
+     * </pre>
      *
-     * If method is a `fnction`, the method in the provided `options.service` will be invoked by this other name.
+     * If it is a `function`, the method in the provided `options.service` will be invoked by this other name.
      *
-     *     // options.methods.foo = function () {};
-     *     instance.foo(1, 2) => fn(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = function () {};
+     * instance.foo(1, 2); // => fn(instance, 1, 2)
+     * </pre>
      *
-     * If method is provided as an `object` it can have the following properties:
+     * If it is provided as an `object` it can have the following properties:
      *
-     * **options.methods[methodName].method** *function|string*
+     * **options.methods[name].method** *function|string*
      *
      * If provided with a `string`, it becomes the `targetName` and, as above:
      *
-     *     // options.methods.foo = { method: 'bar' };
-     *     instance.foo(1, 2) => service.bar(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = { method: 'bar' };
+     * instance.foo(1, 2); // => service.bar(instance, 1, 2)
+     * </pre>
      *
      * If provided with a `function`, as above, its value is directly invoked:
      *
-     *     // options.methods.foo = { method: function () {} };
-     *     instance.foo(1, 2) => fn(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = { method: function () {} };
+     * instance.foo(1, 2); // => fn(instance, 1, 2)
+     * </pre>
      *
-     * **options.methods[methodName].service** *object|string*
+     * **options.methods[name].service** *object|string*
      *
      * Overrides the service for this method only, will result in:
      *
-     *     // options.methods.foo = { service: 'otherService' };
-     *     instance.foo(1, 2) => otherService.foo(instance, 1, 2)
+     * <pre>
+     * options.methods.foo = { service: 'otherService' };
+     * instance.foo(1, 2); // => otherService.foo(instance, 1, 2)
+     * </pre>
      *
-     * **options.methods[methodName].andThen** *function|string*
+     * **options.methods[name].andThen** *function|string*
      *
      * If provided with a `function`, when service method is successful, that function is invoked with both the instance
      * and the service result.
@@ -262,67 +295,6 @@
      *
      *     // options.methods.foo = { andThen: '$replace' };
      *     instance.foo(1, 2) => service.foo(instance, 1, 2) => instance.$replace(result)
-     *
-     *
-     * # Example:
-     *
-     * ```
-     * var options = {
-     *   $constructor: 'MyUser',
-     *   service: 'myUserService',
-     *   methods: {
-     *     delete: null,
-     *     load: 'get',
-     *     save: function (instance) {
-     *       if (instance.id) {
-     *         return $http.post(instance).then(function (data) {
-     *           return instance.$replace(data);
-     *         });
-     *       } else {
-     *         return $http.put(instance).then(function (data) {
-     *           return instance.$replace(data);
-     *         });
-     *       }
-     *     },
-     *     settings: {
-     *       service: 'mySettingsService',
-     *       method: 'get',
-     *       xyz: function () {
-     *
-     *       }
-     *     },
-     *   },
-     * };
-     * var userFactory = corkModeluserFactory('user', options); // function $new(data) {}
-     * ```
-     *
-     * You can now create instances of the user model.
-     *
-     * ```
-     * // MyUser
-     * var user = factory({id: 1, name: 'joe'});
-     * // 1
-     * user.id;
-     * // joe
-     * user.name;
-     * ```
-     *
-     * And invoke the mdoel methods.
-     *
-     * ```
-     * // myUserService.delete(instance);
-     * user.delete().then(...)
-     *
-     * // myUserService.get(instance);
-     * user.load().then(...)
-     *
-     * // $http promise
-     * user.save().then(...)
-     *
-     * // mySettingsService.get(instance);
-     * user.settings().then(...)
-     * ```
-     *
      */
     module.service('corkModelFactory', [
         '$injector',
@@ -334,37 +306,38 @@
 
             // -- private
 
-            function normalizeModel(name, model) {
+            function normalizeModelOptions(options) {
 
+                var name;
                 var hasConstructor;
                 var hasNew;
                 var isValidConstructor;
                 var isValidNew;
 
-                if (!isObjectObject(model)) {
-                    throw new Error('Invalid options for model "' + name + '".');
+                if (!isObjectObject(options)) {
+                    throw new Error('Invalid model options.');
                 } else {
-                    model = copy(model);
-                    model.name = name;
-
-                    hasConstructor = model.hasOwnProperty('$constructor');
-                    hasNew = model.hasOwnProperty('$new');
-                    isValidConstructor = hasConstructor && (isString(model.$constructor) || isFunction(model.$constructor));
-                    isValidNew = hasNew && isFunction(model.$new);
+                    name = options.name;
+                    options = copy(options);
+                    hasConstructor = options.hasOwnProperty('$constructor');
+                    hasNew = options.hasOwnProperty('$new');
+                    isValidConstructor = hasConstructor && (isString(options.$constructor) || isFunction(options.$constructor));
+                    isValidNew = hasNew && isFunction(options.$new);
                     if (hasConstructor && !isValidConstructor || hasNew && !isValidNew || !hasNew && !hasConstructor) {
                         throw new Error('Invalid "$constructor" or "$new" in options for model "' + name + '".');
                     }
                 }
-                model.service = model.service || null;
-                model.methods = model.methods || {};
-                if (!isObjectObject(model.methods)) {
+                options.service = options.service || null;
+                options.methods = options.methods || {};
+                if (!isObjectObject(options.methods)) {
                     throw new Error('Invalid "methods" in options for model "' + name + '".');
                 }
-                return model;
+                return options;
             }
 
-            function normalizeModelMethods(model) {
-                var methods = model.methods;
+            function normalizeModelMethodOptions(options) {
+                var name = options.name;
+                var methods = options.methods;
                 var method;
                 var key;
                 for (key in methods) {
@@ -374,51 +347,51 @@
                             method: method
                         };
                     } else if (!isObject(method)) {
-                        throw new Error('Invalid options for method of model "' + model.name + '".');
+                        throw new Error('Invalid options for method of model "' + name + '".');
                     }
                     method.name = key;
                     if (!isString(method.name) || !method.name.length) {
-                        throw new Error('Invalid method name in options of model "' + model.name + '".');
+                        throw new Error('Invalid method name in options of model "' + name + '".');
                     }
                     if (method.hasOwnProperty('method') && method.method !== null && !isFunction(method.method) && !isString(method.method)) {
-                        throw new Error('Invalid "method" in options for method "' + method.name + '" of model "' + model.name + '".');
+                        throw new Error('Invalid "method" in options for method "' + method.name + '" of model "' + name + '".');
                     }
                     if (!isFunction(method.method)) {
-                        method.service = method.service || model.service;
+                        method.service = method.service || options.service;
                         method.method = method.method || method.name;
-                        method.andThen = method.andThen || model.andThen || null;
+                        method.andThen = method.andThen || options.andThen || null;
                         if (!method.service || !isObjectObject(method.service) && !isString(method.service)) {
-                            throw new Error('Invalid "service" in options for method "' + method.name + '" of model "' + model.name + '".');
+                            throw new Error('Invalid "service" in options for method "' + method.name + '" of model "' + name + '".');
                         }
                     }
                 }
             }
 
-            function makeModelFactory($injector, model) {
+            function newModelFactory($injector, options) {
                 var factory;
-                if (model.$new) {
+                if (options.$new) {
                     factory = function $new(data) {
-                        var instance = model.$new(data);
-                        attachModelMethods($injector, model, instance);
+                        var instance = options.$new(data);
+                        attachModelMethods($injector, options, instance);
                         return instance;
                     };
                 } else {
                     factory = function (data) {
-                        if (isString(model.$constructor)) {
-                            model.$constructor = $injector.get(model.$constructor);
+                        if (isString(options.$constructor)) {
+                            options.$constructor = $injector.get(options.$constructor);
                         }
-                        var Constructor = model.$constructor;
+                        var Constructor = options.$constructor;
                         var instance = new Constructor(data);
-                        attachModelMethods($injector, model, instance);
+                        attachModelMethods($injector, options, instance);
                         return instance;
                     };
                 }
-                factory.model = model;
+                factory.model = options;
                 return factory;
             }
 
-            function attachModelMethods($injector, model, instance) {
-                var methods = model.methods;
+            function attachModelMethods($injector, options, instance) {
+                var methods = options.methods;
                 var method;
                 var key;
                 var boundFn;
@@ -427,7 +400,7 @@
                     if (isFunction(method.method)) {
                         boundFn = angular.bind(instance, method.method);
                     } else {
-                        boundFn = makeModelMethodFromServiceMethod($injector, instance, method);
+                        boundFn = newModelMethodFromServiceMethod($injector, instance, method);
                     }
                     Object.defineProperty(instance, method.name, {
                         enumerable: false,
@@ -437,7 +410,7 @@
                 }
             }
 
-            function makeModelMethodFromServiceMethod($injector, instance, method) {
+            function newModelMethodFromServiceMethod($injector, instance, method) {
                 if (isString(method.service)) {
                     method.service = $injector.get(method.service);
                 }
@@ -446,7 +419,7 @@
                     args.unshift(instance);
                     var promise = method.service[method.method].apply(method.service, args);
                     if (isPromise(promise) && method.andThen) {
-                        promise.then(function xyz(res) {
+                        promise.then(function andThen(res) {
                             instance[method.andThen](res);
                             return res;
                         });
@@ -459,25 +432,25 @@
 
                 /**
                  * @ngdoc function
-                 * @name make
+                 * @name $new
                  * @methodOf ng.cork.model.factory.corkModelFactory
                  *
                  * @description
                  * Returns a function that generates instances of a particular model.
                  *
-                 * @param {string} name The model's name, ex: 'user'
-                 * @param {object} model The model definition.
+                 * @param {object} options The model options. Ex:
                  *
                  *      {
-                 *          $constructor: <string|function>,
-                 *          service: <object|string>,
+                 *          name: user,
+                 *          $constructor: 'MyUser',
+                 *          service: 'myUserService',
                  *          methods: { ... }
                  *      }
                  */
-                make: function make(name, model) {
-                    model = normalizeModel(name, model);
-                    normalizeModelMethods(model);
-                    return makeModelFactory($injector, model);
+                $new: function $new(options) {
+                    options = normalizeModelOptions(options);
+                    normalizeModelMethodOptions(options);
+                    return newModelFactory($injector, options);
                 }
             };
         }
@@ -585,6 +558,17 @@
 
             return CorkModelSpace;
         }
+    ]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    var module = angular.module('ng.cork.model', [
+        'ng.cork.model.base',
+        'ng.cork.model.factory',
+        'ng.cork.model.space'
     ]);
 
 })(angular);
