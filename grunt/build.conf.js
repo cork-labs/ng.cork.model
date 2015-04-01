@@ -284,6 +284,18 @@ module.exports = function (grunt, data) {
                         '<%= files.src_js %>'
                     ],
                     dest: '<%= paths.dist %>/<%= pkg.name %>'
+                },
+                lib: {
+                    src: [
+                        '<%= files.src_js %>'
+                    ],
+                    dest: '<%= paths.dist %>/lib/',
+                    expand: false,
+                    flatten: true,
+                    options: {
+                        concat: false,
+                        output: 'both',
+                    }
                 }
             },
 

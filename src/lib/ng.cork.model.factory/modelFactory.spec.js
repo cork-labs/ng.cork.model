@@ -1,7 +1,7 @@
-describe('ng.cork.models', function () {
+describe('ng.cork.model.factory', function () {
     'use strict';
 
-    beforeEach(module('ng.cork.models.factory'));
+    beforeEach(module('ng.cork.model.factory'));
 
     describe('corkModelFactory', function () {
 
@@ -124,7 +124,7 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
                         expect(factory.model.methods.bar.method).toBe('bar');
-                        expect(factory.model.methods.bar.xyz).toBe(null);
+                        expect(factory.model.methods.bar.andThen).toBe(null);
                     }));
                 });
 
@@ -145,7 +145,7 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
                         expect(factory.model.methods.bar.method).toBe('qux');
-                        expect(factory.model.methods.bar.xyz).toBe(null);
+                        expect(factory.model.methods.bar.andThen).toBe(null);
                     }));
                 });
 
@@ -166,7 +166,7 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe(undefined);
                         expect(factory.model.methods.bar.method).toBe(options.methods.bar);
-                        expect(factory.model.methods.bar.xyz).toBe(undefined);
+                        expect(factory.model.methods.bar.andThen).toBe(undefined);
                     }));
 
                 });
@@ -219,7 +219,7 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
                         expect(factory.model.methods.bar.method).toBe('bar');
-                        expect(factory.model.methods.bar.xyz).toBe(null);
+                        expect(factory.model.methods.bar.andThen).toBe(null);
                     }));
 
                     it('should store the method`s "name" and "service" properties and ignore the "service" property from the model.', inject(function (corkModelFactory)  {
@@ -239,10 +239,10 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('qux');
                         expect(factory.model.methods.bar.method).toBe('bar');
-                        expect(factory.model.methods.bar.xyz).toBe(null);
+                        expect(factory.model.methods.bar.andThen).toBe(null);
                     }));
 
-                    it('should store the method`s "name", "service", "method" and "xyz" properties.', inject(function (corkModelFactory)  {
+                    it('should store the method`s "name", "service", "method" and "andThen" properties.', inject(function (corkModelFactory)  {
 
                         var options = {
                             $constructor: 'Foo',
@@ -250,7 +250,7 @@ describe('ng.cork.models', function () {
                                 bar: {
                                     service: 'baz',
                                     method: 'qux',
-                                    xyz: 'quux'
+                                    andThen: 'quux'
                                 }
                             }
                         };
@@ -260,7 +260,7 @@ describe('ng.cork.models', function () {
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
                         expect(factory.model.methods.bar.method).toBe('qux');
-                        expect(factory.model.methods.bar.xyz).toBe('quux');
+                        expect(factory.model.methods.bar.andThen).toBe('quux');
                     }));
                 });
             });
@@ -537,7 +537,7 @@ describe('ng.cork.models', function () {
             });
         });
 
-        describe('with a service method that returns a promise but has no xyz to apply', function () {
+        describe('with a service method that returns a promise but has no "andThen" to apply', function () {
 
             var factory;
             var MockFoo;
@@ -594,7 +594,7 @@ describe('ng.cork.models', function () {
             });
         });
 
-        describe('with a service method that returns a promise and applies an xyz to the model', function () {
+        describe('with a service method that returns a promise and applies an "andThen" to the model', function () {
 
             var factory;
             var MockFoo;
@@ -604,7 +604,7 @@ describe('ng.cork.models', function () {
                     bar: {
                         service: 'baz',
                         method: 'qux',
-                        xyz: 'quux'
+                        andThen: 'quux'
                     }
                 }
             };
@@ -635,7 +635,7 @@ describe('ng.cork.models', function () {
 
             describe('invoking the attached method and resolving the service promise', function () {
 
-                it('should bind the promise and apply the xyz to the model.', inject(function ($rootScope)  {
+                it('should bind the promise and apply the "andThen" to the model.', inject(function ($rootScope)  {
 
                     var instance = factory();
 

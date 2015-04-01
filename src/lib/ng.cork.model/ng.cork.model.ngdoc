@@ -1,0 +1,26 @@
+@ngdoc overview
+@name ng.cork.model
+@description
+
+> Main module, bundling all the classes and utils.
+
+# Dependencies
+
+- **[ng.cork.model.base](#/api/ng.cork.model.base)** - Provides a base class for models.
+- **[ng.cork.model.factory](#/api/ng.cork.model.factory)** - Provides a model factory generator.
+- **[ng.cork.model.space](#/api/ng.cork.model.space)** - Provides a base class that aggregates related model factories.
+
+
+# Usage
+
+Add this module as a dependency of your modules.
+
+<pre>
+angular.module('app', ['ng.cork.model']);
+</pre>
+
+**NOTE:** Use this module as a dependency if you are using the entire library.
+
+You may otherwise wish to include just the modules you are using.
+
+See {@link #/guide Guide} to learn about file cherry-picking.

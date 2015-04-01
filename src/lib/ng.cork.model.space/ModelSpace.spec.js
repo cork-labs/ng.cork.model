@@ -1,17 +1,17 @@
-describe('ng.cork.models', function () {
+describe('ng.cork.model.space', function () {
     'use strict';
 
-    beforeEach(module('ng.cork.models.models'));
+    beforeEach(module('ng.cork.model.space'));
 
-    describe('CorkModels', function () {
+    describe('CorkModelSpace', function () {
 
         describe('model()', function () {
 
             describe('when an invalid model name is provided', function () {
 
-                it('should throw an error.', inject(function (CorkModels)  {
+                it('should throw an error.', inject(function (CorkModelSpace)  {
 
-                    var models = new CorkModels();
+                    var models = new CorkModelSpace();
 
                     expect(function () {
                         models.model(null);
@@ -21,16 +21,16 @@ describe('ng.cork.models', function () {
 
             describe('when a second argument is provided', function () {
 
-                it('should return the models instance.', inject(function (CorkModels)  {
+                it('should return the models instance.', inject(function (CorkModelSpace)  {
 
-                    var models = new CorkModels();
+                    var models = new CorkModelSpace();
 
                     expect(models.model('foo', 'Foo')).toBe(models);
                 }));
 
-                it('should throw an exception if the model was registered before.', inject(function (CorkModels)  {
+                it('should throw an exception if the model was registered before.', inject(function (CorkModelSpace)  {
 
-                    var models = new CorkModels();
+                    var models = new CorkModelSpace();
 
                     models.model('foo', 'Foo');
 
@@ -39,18 +39,18 @@ describe('ng.cork.models', function () {
                     }).toThrow(new Error('A factory for model "foo" is already registered.'));
                 }));
 
-                it('should throw an exception if argument is not an object.', inject(function (CorkModels)  {
+                it('should throw an exception if argument is not an object.', inject(function (CorkModelSpace)  {
 
-                    var models = new CorkModels();
+                    var models = new CorkModelSpace();
 
                     expect(function () {
                         models.model('foo', []);
                     }).toThrow(new Error('Invalid factory for model "foo".'));
                 }));
 
-                it('should throw an exception if argument is null.', inject(function (CorkModels)  {
+                it('should throw an exception if argument is null.', inject(function (CorkModelSpace)  {
 
-                    var models = new CorkModels();
+                    var models = new CorkModelSpace();
 
                     expect(function () {
                         models.model('foo', null);
@@ -59,9 +59,9 @@ describe('ng.cork.models', function () {
 
                 describe('and argument is a string', function () {
 
-                    it('should store the "name", "$constructor" and "$new" properties.', inject(function (CorkModels)  {
+                    it('should store the "name", "$constructor" and "$new" properties.', inject(function (CorkModelSpace)  {
 
-                        var models = new CorkModels();
+                        var models = new CorkModelSpace();
                         models.model('foo', 'Foo');
 
                         var model = models.model('foo');
@@ -75,11 +75,11 @@ describe('ng.cork.models', function () {
 
                 describe('and argument is a function', function () {
 
-                    it('should store "name", "$factory" and "$new" properties.', inject(function (CorkModels)  {
+                    it('should store "name", "$factory" and "$new" properties.', inject(function (CorkModelSpace)  {
 
                         var $newFoo = function $newFoo() {};
 
-                        var models = new CorkModels();
+                        var models = new CorkModelSpace();
                         models.model('foo', $newFoo);
 
                         var model = models.model('foo');
@@ -98,9 +98,9 @@ describe('ng.cork.models', function () {
 
                 describe('and an unknown model is requested', function () {
 
-                    it('should throw an error.', inject(function (CorkModels)  {
+                    it('should throw an error.', inject(function (CorkModelSpace)  {
 
-                        var models = new CorkModels();
+                        var models = new CorkModelSpace();
 
                         expect(function () {
                             models.model('foo');
@@ -114,10 +114,10 @@ describe('ng.cork.models', function () {
                     var MockFoo;
                     var factory;
                     var mockInstance = {};
-                    beforeEach(inject(function (CorkModels) {
+                    beforeEach(inject(function (CorkModelSpace) {
                         factory = jasmine.createSpy('factory');
                         factory.and.returnValue(mockInstance);
-                        models = new CorkModels();
+                        models = new CorkModelSpace();
                         models.model('foo', factory);
                     }));
 

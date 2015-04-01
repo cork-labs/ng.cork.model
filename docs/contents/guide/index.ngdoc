@@ -2,45 +2,45 @@
 @name Guide
 @description
 
-# ng.cork.models
+# ng.cork.model
 
-[![Build Status: Linux](http://img.shields.io/travis/ng.cork.models/master.svg?style=flat-square)](https://travis-ci.org/ng.cork.models)
-[![Bower version](http://img.shields.io/bower/v/ng.cork.models.svg?style=flat-square)](https://github.com/cork-labs/ng.cork.models)
+[![Build Status: Linux](http://img.shields.io/travis/ng.cork.model/master.svg?style=flat-square)](https://travis-ci.org/ng.cork.model)
+[![Bower version](http://img.shields.io/bower/v/ng.cork.model.svg?style=flat-square)](https://github.com/cork-labs/ng.cork.model)
 
 > AngularJS services and classes for complex model layers.
 
 
 ## Getting Started
 
-Add **ng.cork.models** to you project.
+Add **ng.cork.model** to you project.
 
 Via bower:
 
 ```
-$ bower install --save ng.cork.models
+$ bower install --save ng.cork.model
 ```
 
 Via npm:
 
 ```
-$ npm install --save ng.cork.models
+$ npm install --save ng.cork.model
 ```
 
 
 Include the following JS files in your build:
-- `dist/ng.cork.models.js` OR `dist/ng.cork.models.min.js`
+- `dist/ng.cork.model.js` OR `dist/ng.cork.model.min.js`
 
-Alternatively, include only the files you absolutely need.
-- `dist/ng.cork.models.js` - a base classes to store and retrieve model factories.
-- `dist/ng.cork.models.model.js` - a base class for models.
-- `dist/ng.cork.models.factory.js` - a service that generates model factories which can attach service methods to every model instance.
+Alternatively, include only the files you are going to use:
+- `dist/lib/ng.cork.model.base.js`
+- `dist/lib/ng.cork.model.factory.js`
+- `dist/lib/ng.cork.model.space.js`
 
 
 ## Contributing
 
 We'd love for you to contribute to our source code and to make it even better than it is today!
 
-Make sure you read the [Contributing Guide](https://github.com/cork-labs/ng.cork.models/blob/master/CONTRIBUTING.md) first.
+Make sure you read the [Contributing Guide](https://github.com/cork-labs/ng.cork.model/blob/master/CONTRIBUTING.md) first.
 
 
 ## Developing

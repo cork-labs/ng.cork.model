@@ -2,17 +2,17 @@
 @name API Reference
 @description
 
-# ng.cork.models API Reference
+# ng.cork.model API Reference
 
-> Welcome to the **ng.cork.models** API reference.
+> Welcome to the **ng.cork.model** API reference.
 
-If you want to know how **ng.cork.models** works, checkout the {@link guide/ guide} and the {@link demos/ demos}.
+If you want to know how **ng.cork.model** works, checkout the {@link guide/ guide} and the {@link demos/ demos}.
 
 
 ## Modules
 
-- **[ng.cork.models](#/api/ng.cork.models)** - Main module, requires all other modules.
-- **[ng.cork.models.models](#/api/ng.cork.models.models)** - Provides a base classes to store and retrieve model factories.
-- **[ng.cork.models.model](#/api/ng.cork.models.model)** - Provides a base class for models.
-- **[ng.cork.models.factory](#/api/ng.cork.models.factory)** - Provides a service that generates model factories.
+- **[ng.cork.model](#/api/ng.cork.model)** - Main module, requires all other modules.
+  - **[ng.cork.model.base](#/api/ng.cork.model.base)** - Provides a base class for models.
+  - **[ng.cork.model.factory](#/api/ng.cork.model.factory)** - Provides a model factory generator.
+  - **[ng.cork.model.space](#/api/ng.cork.model.space)** -Provides a base class that aggregates related model factories.
 

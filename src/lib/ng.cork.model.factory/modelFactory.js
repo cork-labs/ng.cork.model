@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.models.factory', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.factory', ['ng.cork.util']);
 
     var copy = angular.copy;
 
@@ -11,10 +11,196 @@
 
     /**
      * @ngdoc service
-     * @name ng.cork.models.factory.corkModelFactory
+     * @name ng.cork.model.factory.corkModelFactory
      *
      * @description
-     * Provides a way to generates model factories from definition object
+     * Provides a way to generates model factories from an options object.
+     *
+     * Generated factories can:
+     * - create instances from a provided factory function or an injectable Constructor.
+     * - decorate instances with ad-hoc functions or methods of one or more injectable services.
+     *
+     * # Model Options
+     *
+     * Object need to contain at least a `$new` or `$constructor` property.
+     *
+     * ```
+     * {$constructor: 'MyUser'}
+     * {$new: function (data) { return new MyUser(data); }}
+     * ```
+     *
+     * > **options.$constructor** *function|string*
+     *
+     * If provided, factory will create instances via `instance = new $constructor(data)`.
+     *
+     * Provide a `function` to be used as constructor
+     *
+     * ```
+     * var options = {
+     *   $constructor: function MyUser() {}
+     * }
+     * ```
+     *
+     * Or a `string` that resolves to a function via AngularJS injection.
+     *
+     * ```
+     * var options = {
+     *   $constructor: 'MyUser'
+     * }
+     * ```
+     *
+     * > **options.$new** *function*
+     *
+     * If provided, `$constructor` is ignored and factor wil create instances via `instance = $new(data)`.
+     *
+     * Provide a `function` that returns new instances of the model.
+     *
+     * ```
+     * var options = {
+     *   $new: function (data) {
+     *     return new MyUser(data);
+     *   }
+     * }
+     * ```
+     *
+     * > **options.service** *object|string*
+     *
+     * If provided, all methods will be invoked on this service, except methods provided as `Function () {}` or methods that reference a service.
+     *
+     * Provide an `object` with the service instance or a `string` that resolves to a service via AngularJS injection.
+     *
+     * > **options.methods** *object*
+     *
+     * Provide an `object` map of methods to attach to the instances.
+     *
+     * ```
+     * var options = {
+     *   $constructor: 'MyUser',
+     *   methods: {
+     *      load: 'get',
+     *      save: ...
+     *   }
+     * }
+     * ```
+     *
+     * For each method the key will become the `methodName` attached to the model instances.
+     *
+     * ```
+     * var factory = corkModelFactory('user', options); // function $new(data) {}
+     * ```
+     *
+     * > **options.methods[methodName]** *null|string|function|object*
+     *
+     * If the value is `null`, the method in the provided `model.service` will be invoked by the same name.
+     *
+     *     // options.methods.foo = null;
+     *     instance.foo(1, 2) => service.foo(instance, 1, 2)
+     *
+     * If method is a `string`, the method in the provided `options.service` will be invoked by this other name.
+     *
+     *     // options.methods.foo = bar;
+     *     instance.foo(1, 2) => service.bar(instance, 1, 2)
+     *
+     * If method is a `fnction`, the method in the provided `options.service` will be invoked by this other name.
+     *
+     *     // options.methods.foo = function () {};
+     *     instance.foo(1, 2) => fn(instance, 1, 2)
+     *
+     * If method is provided as an `object` it can have the following properties:
+     *
+     * **options.methods[methodName].method** *function|string*
+     *
+     * If provided with a `string`, it becomes the `targetName` and, as above:
+     *
+     *     // options.methods.foo = { method: 'bar' };
+     *     instance.foo(1, 2) => service.bar(instance, 1, 2)
+     *
+     * If provided with a `function`, as above, its value is directly invoked:
+     *
+     *     // options.methods.foo = { method: function () {} };
+     *     instance.foo(1, 2) => fn(instance, 1, 2)
+     *
+     * **options.methods[methodName].service** *object|string*
+     *
+     * Overrides the service for this method only, will result in:
+     *
+     *     // options.methods.foo = { service: 'otherService' };
+     *     instance.foo(1, 2) => otherService.foo(instance, 1, 2)
+     *
+     * **options.methods[methodName].andThen** *function|string*
+     *
+     * If provided with a `function`, when service method is successful, that function is invoked with both the instance
+     * and the service result.
+     *
+     *     // options.methods.foo = { andThen: function () {} };
+     *     instance.foo(1, 2) => service.foo(instance, 1, 2) => andThenFn(instance, result)
+     *
+     * If provided with a `string`, when service method is successful, a method with that name is invoked in the instance
+     * and provided with the service result.
+     *
+     *     // options.methods.foo = { andThen: '$replace' };
+     *     instance.foo(1, 2) => service.foo(instance, 1, 2) => instance.$replace(result)
+     *
+     *
+     * # Example:
+     *
+     * ```
+     * var options = {
+     *   $constructor: 'MyUser',
+     *   service: 'myUserService',
+     *   methods: {
+     *     delete: null,
+     *     load: 'get',
+     *     save: function (instance) {
+     *       if (instance.id) {
+     *         return $http.post(instance).then(function (data) {
+     *           return instance.$replace(data);
+     *         });
+     *       } else {
+     *         return $http.put(instance).then(function (data) {
+     *           return instance.$replace(data);
+     *         });
+     *       }
+     *     },
+     *     settings: {
+     *       service: 'mySettingsService',
+     *       method: 'get',
+     *       xyz: function () {
+     *
+     *       }
+     *     },
+     *   },
+     * };
+     * var userFactory = corkModeluserFactory('user', options); // function $new(data) {}
+     * ```
+     *
+     * You can now create instances of the user model.
+     *
+     * ```
+     * // MyUser
+     * var user = factory({id: 1, name: 'joe'});
+     * // 1
+     * user.id;
+     * // joe
+     * user.name;
+     * ```
+     *
+     * And invoke the mdoel methods.
+     *
+     * ```
+     * // myUserService.delete(instance);
+     * user.delete().then(...)
+     *
+     * // myUserService.get(instance);
+     * user.load().then(...)
+     *
+     * // $http promise
+     * user.save().then(...)
+     *
+     * // mySettingsService.get(instance);
+     * user.settings().then(...)
+     * ```
+     *
      */
     module.service('corkModelFactory', [
         '$injector',
@@ -78,7 +264,7 @@
                     if (!isFunction(method.method)) {
                         method.service = method.service || model.service;
                         method.method = method.method || method.name;
-                        method.xyz = method.xyz || model.xyz || null;
+                        method.andThen = method.andThen || model.andThen || null;
                         if (!method.service || !isObjectObject(method.service) && !isString(method.service)) {
                             throw new Error('Invalid "service" in options for method "' + method.name + '" of model "' + model.name + '".');
                         }
@@ -137,9 +323,9 @@
                     var args = [].slice.call(arguments);
                     args.unshift(instance);
                     var promise = method.service[method.method].apply(method.service, args);
-                    if (isPromise(promise) && method.xyz) {
+                    if (isPromise(promise) && method.andThen) {
                         promise.then(function xyz(res) {
-                            instance[method.xyz](res);
+                            instance[method.andThen](res);
                             return res;
                         });
                     }
@@ -152,13 +338,10 @@
                 /**
                  * @ngdoc function
                  * @name make
-                 * @methodOf ng.cork.models.factory.corkModelFactory
+                 * @methodOf ng.cork.model.factory.corkModelFactory
                  *
                  * @description
-                 * Returns a function that generates instances of a particlar model.
-                 *
-                 * It is capable of taking a
-                 *
+                 * Returns a function that generates instances of a particular model.
                  *
                  * @param {string} name The model's name, ex: 'user'
                  * @param {object} model The model definition.
@@ -166,16 +349,7 @@
                  *      {
                  *          $constructor: <string|function>,
                  *          service: <object|string>,
-                 *          methods: {
-                 *              save: function () { },
-                 *              load: <string>,
-                 *              update: {
-                 *                  service: <object|string>
-                 *                  method: <string>,
-                 *                  xyz: <string>,
-                 *              },
-                 *              delete: null
-                 *          },
+                 *          methods: { ... }
                  *      }
                  */
                 make: function make(name, model) {

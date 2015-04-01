@@ -1,41 +1,41 @@
-# ng.cork.models
-[![Build Status: Linux](http://img.shields.io/travis/ng.cork.models/master.svg?style=flat-square)](https://travis-ci.org/ng.cork.models)
-[![Bower version](http://img.shields.io/bower/v/ng.cork.models.svg?style=flat-square)](https://github.com/cork-labs/ng.cork.models)
+# ng.cork.model
+[![Build Status: Linux](http://img.shields.io/travis/ng.cork.model/master.svg?style=flat-square)](https://travis-ci.org/ng.cork.model)
+[![Bower version](http://img.shields.io/bower/v/ng.cork.model.svg?style=flat-square)](https://github.com/cork-labs/ng.cork.model)
 
 > AngularJS services and classes for complex model layers.
 
 
 ## Getting Started
 
-Add **ng.cork.models** to you project.
+Add **ng.cork.model** to you project.
 
 Via bower:
 
 ```
-$ bower install --save ng.cork.models
+$ bower install --save ng.cork.model
 ```
 
 Via npm:
 
 ```
-$ npm install --save ng.cork.models
+$ npm install --save ng.cork.model
 ```
 
 
 Include the following JS files in your build:
-- `dist/ng.cork.models.js` OR `dist/ng.cork.models.min.js`
+- `dist/ng.cork.model.js` OR `dist/ng.cork.model.min.js`
 
-Alternatively, include only the files you absolutely need.
-- `dist/ng.cork.models.js` - a base classes to store and retrieve model factories.
-- `dist/ng.cork.models.model.js` - a base class for models.
-- `dist/ng.cork.models.factory.js` - a service that generates model factories which can attach service methods to every model instance.
+Alternatively, include only the files you are going to use:
+- `dist/lib/ng.cork.model.space.js`
+- `dist/lib/ng.cork.model.model.js`
+- `dist/lib/ng.cork.model.factory.js`
 
 
 ## Documentation
 
-Make sure to check the [official documentation](http://jarvis.cork-labs.org/ng.cork.models/current/docs) where you can find a
-[guide](http://jarvis.cork-labs.org/ng.cork.models/current/docs/#/guide), a few [demos](http://jarvis.cork-labs.org/ng.cork.models/current/docs/#/demos) and the complete
-[API reference](http://jarvis.cork-labs.org/ng.cork.models/current/docs/#/docs).
+Make sure to check the [official documentation](http://jarvis.cork-labs.org/ng.cork.model/current/docs) where you can find a
+[guide](http://jarvis.cork-labs.org/ng.cork.model/current/docs/#/guide), a few [demos](http://jarvis.cork-labs.org/ng.cork.model/current/docs/#/demos) and the complete
+[API reference](http://jarvis.cork-labs.org/ng.cork.model/current/docs/#/docs).
 
 
 ## Contributing

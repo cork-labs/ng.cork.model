@@ -1,5 +1,5 @@
 {
-  "name": "ng.cork.models",
+  "name": "ng.cork.model",
   "version": "0.0.1",
   "description": "AngularJS services and classes for complex model layers.",
   "author": {
@@ -15,11 +15,11 @@
   "keywords": [
     "angularjs"
   ],
-  "homepage": "https://github.com/cork-labs/ng.cork.models",
-  "bugs": "https://github.com/cork-labs/ng.cork.models/issues",
+  "homepage": "https://github.com/cork-labs/ng.cork.model",
+  "bugs": "https://github.com/cork-labs/ng.cork.model/issues",
   "repository": {
     "type": "git",
-    "url": "git@github.com:cork-labs/ng.cork.models.git"
+    "url": "git@github.com:cork-labs/ng.cork.model.git"
   },
   "readmeFilename": "README.md",
   "dependencies": {

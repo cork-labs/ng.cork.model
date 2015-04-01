@@ -1,12 +1,12 @@
 @ngdoc overview
-@name ng.cork.models.model.model
+@name ng.cork.model.base
 @description
 
 > Provides a base class for models.
 
 # Dependencies
 
-- None.
+- Service `corkUtil`, provided by [bower:ng.cork.util](https://github.com/cork-labs/ng.cork.util)
 
 
 # Usage
@@ -14,23 +14,25 @@
 Add the module as a dependency.
 
 <pre>
-angular.module('app', ['ng.cork.models.model']);
+angular.module('app', ['ng.cork.model.base']);
 </pre>
 
-**NOTE:** this is a partial module. Use `ng.cork.models` instead to include the entire library.
+**NOTE:** this is a partial module. Use `ng.cork.model` instead to include the entire library.
 
 
-## [CorkModel](#/api/ng.cork.models.model.CorkModel)
+## Factory: [CorkModelBase](#/api/ng.cork.model.base.CorkModelBase)
 
-Use the {@link ng.cork.models.model.CorkModel CorkModel} as a base to your model classes.
+> Base class for complex model layers.
+
+Use the {@link ng.cork.model.base.CorkModelBase CorkModelBase} as a base to your model classes.
 
 <pre>
-angular.module('app', ['ng.cork.models.model'])
+angular.module('app', ['ng.cork.model.base'])
 .factory('MyUser', [
-    'CorkModel',
-    function (CorkModel) {
+    'CorkModelBase',
+    function (CorkModelBase) {
         var MyUser = function () {
-            CorkModel.call(this);
+            CorkModelBase.call(this);
             // add your methods and properties
             this.foo = function () {
                 // ... some logic ...
@@ -40,7 +42,7 @@ angular.module('app', ['ng.cork.models.model'])
                 // ... something to instance based on the new data
             };
         };
-        MyUser.prototype = Object.create(CorkModel.protoype);
+        MyUser.prototype = Object.create(CorkModelBase.protoype);
         MyUser.prototype.constructor = MyUser;
         return MyUser;
     }
@@ -50,7 +52,7 @@ angular.module('app', ['ng.cork.models.model'])
 Inject your model constructors to create instances of them.
 
 <pre>
-angular.module('app', ['ng.cork.models.model'])
+angular.module('app', ['ng.cork.model.base'])
 .controller('myController', [
     'MyUser',
     function (MyUser) {

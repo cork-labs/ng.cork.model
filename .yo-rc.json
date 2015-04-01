@@ -1,10 +1,10 @@
 {
   "generator-nglib": {
-    "project.name": "ng.cork.models",
+    "project.name": "ng.cork.model",
     "project.description": "AngularJS services and classes for complex model layers.",
-    "bower.id": "ng.cork.models",
-    "npm.id": "ng.cork.models",
-    "angular.module": "ng.cork.models",
+    "bower.id": "ng.cork.model",
+    "npm.id": "ng.cork.model",
+    "angular.module": "ng.cork.model",
     "has.tpl": false,
     "has.css": false,
     "has.less": false,
@@ -12,17 +12,17 @@
     "has.docs": true,
     "use.git": true,
     "github.username": "cork-labs",
-    "github.reponame": "ng.cork.models",
-    "homepage.url": "https://github.com/cork-labs/ng.cork.models",
-    "docs.url": "http://jarvis.cork-labs.org/ng.cork.models/current/docs",
-    "bugs.url": "https://github.com/cork-labs/ng.cork.models/issues",
+    "github.reponame": "ng.cork.model",
+    "homepage.url": "https://github.com/cork-labs/ng.cork.model",
+    "docs.url": "http://jarvis.cork-labs.org/ng.cork.model/current/docs",
+    "bugs.url": "https://github.com/cork-labs/ng.cork.model/issues",
     "license.name": "MIT",
     "license.url": "http://cork-labs.mit-license.org/2015",
     "author.name": "Cork Labs",
     "author.email": "contact@cork-labs.org",
     "author.url": "http://cork-labs.org",
     "use.travis": true,
-    "travis.id": "ng.cork.models",
-    "repo.url": "git@github.com:cork-labs/ng.cork.models.git"
+    "travis.id": "ng.cork.model",
+    "repo.url": "git@github.com:cork-labs/ng.cork.model.git"
   }
 }

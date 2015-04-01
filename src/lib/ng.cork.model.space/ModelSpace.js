@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.models.models', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.space', ['ng.cork.util']);
 
     var copy = angular.copy;
 
@@ -10,24 +10,24 @@
 
     /**
      * @ngdoc object
-     * @name ng.cork.models.models.CorkModels
+     * @name ng.cork.model.space.CorkModelSpace
      *
      * @description
      * Base class for storing model factories.
      *
      * @property {string} baseUrl Prepended to all requests. Configurable via constructor, defaults to '/'.
      */
-    module.factory('CorkModels', [
+    module.factory('CorkModelSpace', [
         '$injector',
         'corkUtil',
-        function CorkModelsFactory($injector, corkUtil) {
+        function CorkModelSpaceFactory($injector, corkUtil) {
 
             /**
              * @type {object} default configuration
              */
             var defaults = {};
 
-            var CorkModels = function (config) {
+            var CorkModelSpace = function (config) {
                 var self = this;
 
                 config = corkUtil.extend(copy(defaults), config || {});
@@ -40,7 +40,7 @@
                 /**
                  * @ngdoc function
                  * @name model
-                 * @methodOf ng.cork.models.models.CorkModels
+                 * @methodOf ng.cork.model.space.CorkModelSpace
                  *
                  * @description
                  * Registers or retrieves a model factory.
@@ -96,7 +96,7 @@
                 };
             };
 
-            return CorkModels;
+            return CorkModelSpace;
         }
     ]);
 
