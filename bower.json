@@ -7,6 +7,7 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/cork-labs/ng.cork.model",
+  "main": "dist/ng.cork.model.min.js",
   "ignore": [
     "bin",
     "docs",
