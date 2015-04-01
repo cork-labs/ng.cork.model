@@ -10,8 +10,8 @@ describe('ng.cork.model.factory', function () {
             it('should throw an error if argument is not an object.', inject(function (corkModelFactory)  {
 
                 expect(function () {
-                    corkModelFactory.make('foo', false);
-                }).toThrow(new Error('Invalid options for model "foo".'));
+                    corkModelFactory.$new(false);
+                }).toThrow(new Error('Invalid model options.'));
             }));
 
             it('should throw an error if "$constructor" and "$new" are not provided.', inject(function (corkModelFactory)  {
@@ -19,8 +19,8 @@ describe('ng.cork.model.factory', function () {
                 var options = {};
 
                 expect(function () {
-                    corkModelFactory.make('foo', options);
-                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "foo".'));
+                    corkModelFactory.$new(options);
+                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "undefined".'));
             }));
 
             it('should throw an error if "$constructor" is not string or function.', inject(function (corkModelFactory)  {
@@ -31,8 +31,8 @@ describe('ng.cork.model.factory', function () {
                 };
 
                 expect(function () {
-                    corkModelFactory.make('foo', options);
-                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "foo".'));
+                    corkModelFactory.$new(options);
+                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "undefined".'));
             }));
 
             it('should throw an error if "$new" is not a function.', inject(function (corkModelFactory)  {
@@ -43,17 +43,18 @@ describe('ng.cork.model.factory', function () {
                 };
 
                 expect(function () {
-                    corkModelFactory.make('foo', options);
-                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "foo".'));
+                    corkModelFactory.$new(options);
+                }).toThrow(new Error('Invalid "$constructor" or "$new" in options for model "undefined".'));
             }));
 
             it('should store the provided "name" and "$constructor" and initialize the "service" and "methods" properties.', inject(function (corkModelFactory)  {
 
                 var options = {
+                    name: 'foo',
                     $constructor: function () {}
                 };
 
-                var factory = corkModelFactory.make('foo', options);
+                var factory = corkModelFactory.$new(options);
 
                 expect(typeof factory).toBe('function');
                 expect(factory.model.name).toBe('foo');
@@ -72,8 +73,8 @@ describe('ng.cork.model.factory', function () {
                     };
 
                     expect(function () {
-                        corkModelFactory.make('foo', options);
-                    }).toThrow(new Error('Invalid "methods" in options for model "foo".'));
+                        corkModelFactory.$new(options);
+                    }).toThrow(new Error('Invalid "methods" in options for model "undefined".'));
                 }));
 
                 it('should throw an error if "methods" contains elements that are neither strings or objects or functions.', inject(function (corkModelFactory)  {
@@ -86,8 +87,8 @@ describe('ng.cork.model.factory', function () {
                     };
 
                     expect(function () {
-                        corkModelFactory.make('foo', options);
-                    }).toThrow(new Error('Invalid options for method of model "foo".'));
+                        corkModelFactory.$new(options);
+                    }).toThrow(new Error('Invalid options for method of model "undefined".'));
                 }));
 
                 it('should throw an error if method keys that is an empty string.', inject(function (corkModelFactory)  {
@@ -103,8 +104,8 @@ describe('ng.cork.model.factory', function () {
                     };
 
                     expect(function () {
-                        corkModelFactory.make('foo', options);
-                    }).toThrow(new Error('Invalid method name in options of model "foo".'));
+                        corkModelFactory.$new(options);
+                    }).toThrow(new Error('Invalid method name in options of model "undefined".'));
                 }));
 
                 describe('and "methods" contains a null element', function () {
@@ -119,7 +120,7 @@ describe('ng.cork.model.factory', function () {
                             service: 'baz'
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
@@ -140,7 +141,7 @@ describe('ng.cork.model.factory', function () {
                             service: 'baz'
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
@@ -161,7 +162,7 @@ describe('ng.cork.model.factory', function () {
                             service: 'baz'
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe(undefined);
@@ -186,8 +187,8 @@ describe('ng.cork.model.factory', function () {
                         };
 
                         expect(function () {
-                            corkModelFactory.make('foo', options);
-                        }).toThrow(new Error('Invalid "method" in options for method "bar" of model "foo".'));
+                            corkModelFactory.$new(options);
+                        }).toThrow(new Error('Invalid "method" in options for method "bar" of model "undefined".'));
                     }));
 
                     it('should throw an error if both the method and the model do not contain a "service" property.', inject(function (corkModelFactory)  {
@@ -200,8 +201,8 @@ describe('ng.cork.model.factory', function () {
                         };
 
                         expect(function () {
-                            corkModelFactory.make('foo', options);
-                        }).toThrow(new Error('Invalid "service" in options for method "bar" of model "foo".'));
+                            corkModelFactory.$new(options);
+                        }).toThrow(new Error('Invalid "service" in options for method "bar" of model "undefined".'));
                     }));
 
                     it('should store the method`s "name" and "method" properties and take the "service" property from the model.', inject(function (corkModelFactory)  {
@@ -214,7 +215,7 @@ describe('ng.cork.model.factory', function () {
                             service: 'baz'
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
@@ -234,7 +235,7 @@ describe('ng.cork.model.factory', function () {
                             service: 'baz'
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('qux');
@@ -255,7 +256,7 @@ describe('ng.cork.model.factory', function () {
                             }
                         };
 
-                        var factory = corkModelFactory.make('foo', options);
+                        var factory = corkModelFactory.$new(options);
 
                         expect(factory.model.methods.bar.name).toBe('bar');
                         expect(factory.model.methods.bar.service).toBe('baz');
@@ -285,7 +286,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('Foo', MockFoo);
             }));
             beforeEach(inject(function (corkModelFactory) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
             }));
 
             it('should set the "$new" to the actual function.', function ()  {
@@ -333,7 +334,7 @@ describe('ng.cork.model.factory', function () {
                 };
             }));
             beforeEach(inject(function (corkModelFactory) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
             }));
 
             it('should set the "$constructor" to the actual constructor.', function ()  {
@@ -369,7 +370,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('Foo', MockFoo);
             }));
             beforeEach(inject(function (corkModelFactory) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
             }));
 
             it('should invoke the injector and set the "$constructor" to the actual constructor.', function ()  {
@@ -422,7 +423,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('Foo', MockFoo);
             }));
             beforeEach(inject(function (corkModelFactory) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
             }));
 
             it('should attach the provided function to the instance.', function ()  {
@@ -470,7 +471,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('baz', mockService);
             }));
             beforeEach(inject(function (corkModelFactory, $injector) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
                 // spy on the injector
                 spyOn($injector, 'get').and.callThrough();
                 $inj = $injector;
@@ -566,7 +567,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('baz', mockService);
             }));
             beforeEach(inject(function (corkModelFactory) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
                 // mock the service method response
                 mockPromise = jasmine.createSpyObj('promise', ['then']);
                 mockService.qux.and.returnValue(mockPromise);
@@ -626,7 +627,7 @@ describe('ng.cork.model.factory', function () {
                 $provide.value('baz', mockService);
             }));
             beforeEach(inject(function (corkModelFactory, $q) {
-                factory = corkModelFactory.make('foo', options);
+                factory = corkModelFactory.$new(options);
                 // mock the service method response (promise)
                 mockDefer = $q.defer();
                 mockPromise = mockDefer.promise;

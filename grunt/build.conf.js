@@ -144,7 +144,7 @@ module.exports = function (grunt, data) {
 
             // used in the name of the template module (results in "my.module.templates")
             // as well as filenames of dist files
-            ngNamespace: 'ng.cl.api',
+            ngNamespace: 'ng.cork.model',
 
             // -- docs related
 
@@ -169,7 +169,10 @@ module.exports = function (grunt, data) {
                 examplesScripts: [
                     '<%= paths.vendor %>/angular/angular.js',
                     '<%= paths.vendor %>/ng.cork.util/dist/ng.cork.util.js',
-                    'src/lib/<%= vars.ngNamespace %>/<%= vars.ngNamespace %>.js',
+                    'src/lib/ng.cork.model/ng.cork.model.js',
+                    'src/lib/ng.cork.model.base/ModelBase.js',
+                    'src/lib/ng.cork.model.factory/modelFactory.js',
+                    'src/lib/ng.cork.model.space/ModelSpace.js',
 
                 ],
                 examplesStyles: [

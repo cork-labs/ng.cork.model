@@ -1,0 +1,139 @@
+@ngdoc overview
+@name corkModelFactory - generate $new services
+@description
+
+## Creating a User factory as an AngularJS service.
+
+In this example we create a model factory that attaches some methods to the instances.
+
+The four ways of expressing methods have examples below.
+- as null,
+- as a string (map method name)
+- as a function (provide your implementation)
+- as an object (detailed)
+
+<doc:example module="app" height="200">
+    <doc:source>
+        <script>
+        angular.module('app', ['ng.cork.model'])
+
+        // a dummy service
+        .service('myUserService', [
+            '$rootScope',
+            function ($rootScope) {
+                return {
+                    delete: function (instance) {
+                        $rootScope.$broadcast('myUserService', 'delete', instance);
+                    },
+                    post: function (instance) {
+                        $rootScope.$broadcast('myUserService', 'post', instance);
+                    },
+                    put: function (instance) {
+                        $rootScope.$broadcast('myUserService', 'put', instance);
+                    },
+                    get: function (instance) {
+                        $rootScope.$broadcast('myUserService', 'get', instance)
+                    }
+                };
+            }
+        ])
+
+        // another dummy service
+        .service('mySettingsService', [
+            '$rootScope',
+            function ($rootScope) {
+                return {
+                    byUser: function (instance) { $rootScope.$broadcast('mySettingsService', 'byUser', instance); }
+                };
+            }
+        ])
+
+        // publishing our factory as an AngularJS service.
+        .service('$newUser', [
+            'corkModelFactory',
+            'myUserService',
+            function (corkModelFactory, myUserService) {
+                // generates the factory
+                return corkModelFactory.$new({
+                    // improves debugging
+                    name: 'user',
+                    // the simplest possible constructor
+                    $constructor: function (data) {
+                        angular.extend(this, data);
+                    },
+                    service: 'myUserService',
+                    methods: {
+                        // => `myUserService.delete()`
+                        delete: null,
+                        // => `myUserService.get()`
+                        load: 'get',
+                        // => anonymous fn, bound to the instance
+                        save: function () {
+                            if (!this.id) {
+                                return myUserService.post(this);
+                            } else {
+                                return myUserService.put(this);
+                            }
+                        },
+                        // => mySettingsService.byUser()
+                        settings: {
+                            service: 'mySettingsService',
+                            method: 'byUser',
+                            andThen: function () {}
+                        }
+                    }
+                });
+            }
+        ])
+
+        // create instances and inspect which methods are executed
+        .controller('exampleCtrl', [
+            '$scope',
+            '$newUser',
+            function ($scope, $newUser) {
+
+                $scope.users = [];
+                $scope.log = [];
+                $scope.name = "joe";
+
+                $scope.id = 0;
+                $scope.add = function () {
+                    $scope.users.push($newUser({id: $scope.id++, name: $scope.name}));
+                }
+                $scope.do = function (user, method) {
+                    user[method]();
+                }
+                function showServiceActiviy ($evt, method, user) {
+                    $scope.log.push({service: $evt.name, method: method, user: user});
+                }
+                $scope.$on('myUserService', showServiceActiviy);
+                $scope.$on('mySettingsService', showServiceActiviy);
+            }
+        ]);
+        </script>
+        <style>
+        .container {
+           padding: 10px;
+        }
+        </style>
+        <div data-ng-controller="exampleCtrl" class="container">
+            <p>
+                name: <input ng-model="name" />
+                <button ng-click="add()">new user({{id}}, '{{name}}'')</button><p>
+            <ul>
+                <li ng-repeat="user in users">
+                    <strong>{{user.id}}: {{user.name}}</strong>
+                    <a ng-click="do(user, 'delete')">delete</a>
+                    <a ng-click="do(user, 'load')">load</a>
+                    <a ng-click="do(user, 'save')">save</a>
+                    <a ng-click="do(user, 'settings')">settings</a>
+                </li>
+            </ul>
+            <ul>
+                <li ng-repeat="entry in log">
+                    <strong>{{entry.service}}.{{entry.method}}({{entry.user}})</strong>
+                </li>
+            </ul>
+        </div>
+    </doc:source>
+</doc:example>

@@ -22,35 +22,24 @@ angular.module('app', ['ng.cork.model.factory']);
 
 ## Service: [corkModelFactory](#/api/ng.cork.model.factory.corkModelFactory)
 
-> Generate model factories by providing a definition.
+> Generate model factories by providing a definition object.
 
-Generate factories on the fly.
+Inject the service to generate factories on the fly.
 
 <pre>
 angular.module('app', ['ng.cork.model.factory'])
 .controller('myController', [
     'corkModelFactory',
     function (corkModelFactory) {
-        var userFactory = corkModelFactory({
-            $constructor: CorkModel,
-            name: 'post',
-            service 'myServicePosts',
-            methods: {
-                'load': null,
-                'save': null,
-                'delete': null
-            }
-        });
-        // create instances using the factory
+        var userFactory = corkModelFactory.$new( ... options ... );
         var user = userFactory($scope.data);
-        // will invoke myServicePosts.delete(user)
         user.delete().then( ... );
     }
 ]);
 </pre>
 
-Aggregate your model factories in an instance of {@link ng.cork.model.space.CorkModelSpace CorkModelSpace} to be able to
-create model instances from any part of your app.
+**Tip:** Aggregate your model factories in an instance of {@link ng.cork.model.space.CorkModelSpace CorkModelSpace} to
+be able to create model instances from any part of your app.
 
 <pre>
 angular.module('app', ['ng.cork.model.factory'])
@@ -64,9 +53,9 @@ angular.module('app', ['ng.cork.model.factory'])
     'corkModelFactory',
     'myApiModels',
     function (corkModelFactory, myApiModels) {
-        myApiModels.model('user', corkModelFactory({ ... }));
-        myApiModels.model('post', corkModelFactory({ ... }));
-        myApiModels.model('tag', corkModelFactory({ ... }));
+        myApiModels.model('user', corkModelFactory.$new({ ... }));
+        myApiModels.model('post', corkModelFactory.$new({ ... }));
+        myApiModels.model('tag', corkModelFactory.$new({ ... }));
     }
 ])
 .controller('myController', [
