@@ -1,5 +1,5 @@
 # ng.cork.model
-[![Build Status: Linux](http://img.shields.io/travis/ng.cork.model/master.svg?style=flat-square)](https://travis-ci.org/ng.cork.model)
+[![Build Status: Linux](http://img.shields.io/travis/cork-labs/ng.cork.model/master.svg?style=flat-square)](https://travis-ci.org/cork-labs/ng.cork.model)
 [![Bower version](http://img.shields.io/bower/v/ng.cork.model.svg?style=flat-square)](https://github.com/cork-labs/ng.cork.model)
 
 > AngularJS services and classes for complex model layers.
