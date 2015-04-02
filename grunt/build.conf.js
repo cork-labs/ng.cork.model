@@ -87,7 +87,8 @@ module.exports = function (grunt, data) {
             // watch: build_test, build_vendors
             vendor_js: [
                 '<%= paths.vendor %>/angular/angular.js',
-                '<%= paths.vendor %>/ng.cork.util/dist/ng.cork.util.js'
+                '<%= paths.vendor %>/ng.cork.util/dist/ng.cork.util.js',
+                '<%= paths.vendor %>/ng.cork.deep/dist/ng.cork.deep.js'
             ],
 
             // test only dependencies
@@ -167,8 +168,9 @@ module.exports = function (grunt, data) {
 
                 // scripts stylesheets and examples
                 examplesScripts: [
-                    '<%= paths.vendor %>/angular/angular.js',
-                    '<%= paths.vendor %>/ng.cork.util/dist/ng.cork.util.js',
+                    'vendor/angular/angular.js',
+                    'vendor/ng.cork.util/dist/ng.cork.util.js',
+                    'vendor/ng.cork.deep/dist/ng.cork.deep.js',
                     'src/lib/ng.cork.model/ng.cork.model.js',
                     'src/lib/ng.cork.model.base/ModelBase.js',
                     'src/lib/ng.cork.model.factory/modelFactory.js',

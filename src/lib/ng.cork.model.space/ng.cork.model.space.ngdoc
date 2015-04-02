@@ -6,7 +6,7 @@
 
 # Dependencies
 
-- None.
+- Service `corkDeepExtend`, provided by [bower:ng.cork.deep](https://github.com/cork-labs/ng.cork.deep)
 
 
 # Usage

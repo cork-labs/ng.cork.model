@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.model.base', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.base', ['ng.cork.deep.extend']);
 
     var isString = angular.isString;
 
@@ -13,10 +13,8 @@
      * Abstract class for models, provides data encapuslation.
      */
     module.factory('CorkModelBase', [
-        'corkUtil',
-        function CorkModelBaseFactory(corkUtil) {
-
-            var extend = corkUtil.extend;
+        'corkDeepExtend',
+        function CorkModelBaseFactory(corkDeepExtend) {
 
             /**
              * @ngdoc method
@@ -70,7 +68,7 @@
                 configurable: true,
                 value: function (data) {
                     this.$empty();
-                    extend(this, data);
+                    corkDeepExtend(this, data);
                     this.$decorate(data);
                 }
             });
@@ -87,7 +85,7 @@
              */
             Object.defineProperty(CorkModelBase.prototype, '$merge', {
                 value: function (data) {
-                    extend(this, data);
+                    corkDeepExtend(this, data);
                     this.$decorate(data);
                 }
             });

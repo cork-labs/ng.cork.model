@@ -25,10 +25,15 @@ $ npm install --save ng.cork.model
 Include the following JS files in your build:
 - `dist/ng.cork.model.js` OR `dist/ng.cork.model.min.js`
 
+The following bower dependencies must also be included:
+- `vendor/ng.cork.util/dist/ng.cork.util.js`
+- `vendor/ng.cork.deep/dist/ng.cork.deep.js`
+
 Alternatively, include only the files you are going to use:
 - `dist/lib/ng.cork.model.space.js`
 - `dist/lib/ng.cork.model.model.js`
 - `dist/lib/ng.cork.model.factory.js`
+- *... but don't forget to load modules required by these ...*
 
 
 ## Documentation
