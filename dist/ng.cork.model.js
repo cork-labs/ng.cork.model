@@ -1,5 +1,5 @@
 /**
- * ng.cork.model - v0.0.2 - 2015-04-01
+ * ng.cork.model - v0.0.2 - 2015-04-02
  * https://github.com/cork-labs/ng.cork.model
  *
  * Copyright (c) 2015 Cork Labs <http://cork-labs.org>
@@ -148,7 +148,7 @@
      * var userFactory = corkModelFactory.$new('user', ... options ... );
      * </pre>
      *
-     * Provide an object with a valid `$constructor` property or a `$new` delegate.
+     * Provide an *Object* with a valid `$constructor` property or a `$new` delegate.
      *
      * ```
      * // equivalent
@@ -156,13 +156,13 @@
      * {$new: function (data) { return new MyUser(data); }}
      * ```
      *
-     * ## **options.$constructor** *function|string*
+     * ## **options.$constructor** - *Function|String*
      *
      * Create instance via `= new Constructor(data)`.
      *
      * If provided, factory will create instances via `instance = new $constructor(data)`.
      *
-     * Provide a `function` to be used as constructor
+     * Provide a *Function* to be used as constructor
      *
      * <pre>
      * var options = {
@@ -170,7 +170,7 @@
      * }
      * </pre>
      *
-     * Or a `string` that resolves to a function via AngularJS injection.
+     * Or a *String* that resolves to a function via AngularJS injection.
      *
      * <pre>
      * var options = {
@@ -178,13 +178,13 @@
      * }
      * </pre>
      *
-     * ## **options.$new** *function*
+     * ## **options.$new** - *Function*
      *
      * Delegate creation of instances to this function: `instance = $new(data)`.
      *
      * If provided, `$constructor` is ignored.
      *
-     * Provide a `function` that returns new instances of the model.
+     * Provide a *Function* that returns new instances of the model.
      *
      * <pre>
      * var options = {
@@ -194,11 +194,11 @@
      * }
      * </pre>
      *
-     * ## **options.service** *object|string*
+     * ## **options.service** - *Object|String*
      *
      * Decorate instances with some methods of this service.
      *
-     * Provide an `object` with the service instance or a `string` that resolves to a service via AngularJS injection.
+     * Provide an *Object* with the service instance or a *String* that resolves to a service via AngularJS injection.
      *
      * <pre>
      * var options = {
@@ -207,9 +207,9 @@
      * }
      * </pre>
      *
-     * ## **options.methods** *object*
+     * ## **options.methods** - *Object*
      *
-     * Provide an `object` map of methods you wish to attach to the instances.
+     * Provide an *Object* map of methods you wish to attach to the instances.
      *
      * <pre>
      * var options = {
@@ -224,7 +224,7 @@
      * var userFactory = corkModelFactory.$new('user', options);
      * </pre>
      *
-     * The object keys will become the method `name`, as attached to the model instances.
+     * The object keys will become the name of the method attached to the model instances.
      *
      * <pre>
      * var user = userFactory({id: 1});
@@ -232,7 +232,7 @@
      * user.save().then( ... );
      * </pre>
      *
-     * ## **options.methods[name]** *null|string|function|object*
+     * ## **options.methods[name]** - *null|String|Function|Object*
      *
      * If the value is `null`, the method in the provided `model.service` will be invoked by the same name.
      *
@@ -241,39 +241,39 @@
      * instance.foo(1, 2); // => service.foo(instance, 1, 2)
      * </pre>
      *
-     * If it is a `string`, the method in the provided `options.service` will be invoked by this other name.
+     * If it is a *String*, the method in the provided `options.service` will be invoked by this other name.
      *
      * <pre>
      * options.methods.foo = bar;
      * instance.foo(1, 2); // => service.bar(instance, 1, 2)
      * </pre>
      *
-     * If it is a `function`, the method in the provided `options.service` will be invoked by this other name.
+     * If it is a *Function*, the method in the provided `options.service` will be invoked by this other name.
      *
      * <pre>
      * options.methods.foo = function () {};
      * instance.foo(1, 2); // => fn(instance, 1, 2)
      * </pre>
      *
-     * If it is provided as an `object` it can have the following properties:
+     * If it is provided as an *Object* it can have the following properties:
      *
-     * **options.methods[name].method** *function|string*
+     * **options.methods[name].method** - *Function|String*
      *
-     * If provided with a `string`, it becomes the `targetName` and, as above:
+     * If provided with a *String*, it becomes the `targetName` and, as above:
      *
      * <pre>
      * options.methods.foo = { method: 'bar' };
      * instance.foo(1, 2); // => service.bar(instance, 1, 2)
      * </pre>
      *
-     * If provided with a `function`, as above, its value is directly invoked:
+     * If provided with a *Function*, as above, its value is directly invoked:
      *
      * <pre>
      * options.methods.foo = { method: function () {} };
      * instance.foo(1, 2); // => fn(instance, 1, 2)
      * </pre>
      *
-     * **options.methods[name].service** *object|string*
+     * **options.methods[name].service** *Object|String*
      *
      * Overrides the service for this method only, will result in:
      *
@@ -282,15 +282,15 @@
      * instance.foo(1, 2); // => otherService.foo(instance, 1, 2)
      * </pre>
      *
-     * **options.methods[name].andThen** *function|string*
+     * **options.methods[name].andThen** *Function|String*
      *
-     * If provided with a `function`, when service method is successful, that function is invoked with both the instance
+     * If provided with a *Function*, when service method is successful, that function is invoked with both the instance
      * and the service result.
      *
      *     // options.methods.foo = { andThen: function () {} };
      *     instance.foo(1, 2) => service.foo(instance, 1, 2) => andThenFn(instance, result)
      *
-     * If provided with a `string`, when service method is successful, a method with that name is invoked in the instance
+     * If provided with a *String*, when service method is successful, a method with that name is invoked in the instance
      * and provided with the service result.
      *
      *     // options.methods.foo = { andThen: '$replace' };
