@@ -1,5 +1,5 @@
 /**
- * ng.cork.model - v0.0.2 - 2015-04-02
+ * ng.cork.model - v0.0.3 - 2015-04-02
  * https://github.com/cork-labs/ng.cork.model
  *
  * Copyright (c) 2015 Cork Labs <http://cork-labs.org>
@@ -8,7 +8,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.model.base', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.base', ['ng.cork.deep.extend']);
 
     var isString = angular.isString;
 
@@ -20,10 +20,8 @@
      * Abstract class for models, provides data encapuslation.
      */
     module.factory('CorkModelBase', [
-        'corkUtil',
-        function CorkModelBaseFactory(corkUtil) {
-
-            var extend = corkUtil.extend;
+        'corkDeepExtend',
+        function CorkModelBaseFactory(corkDeepExtend) {
 
             /**
              * @ngdoc method
@@ -77,7 +75,7 @@
                 configurable: true,
                 value: function (data) {
                     this.$empty();
-                    extend(this, data);
+                    corkDeepExtend(this, data);
                     this.$decorate(data);
                 }
             });
@@ -94,7 +92,7 @@
              */
             Object.defineProperty(CorkModelBase.prototype, '$merge', {
                 value: function (data) {
-                    extend(this, data);
+                    corkDeepExtend(this, data);
                     this.$decorate(data);
                 }
             });
@@ -461,7 +459,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.model.space', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.space', ['ng.cork.deep.extend']);
 
     var copy = angular.copy;
 
@@ -479,8 +477,8 @@
      */
     module.factory('CorkModelSpace', [
         '$injector',
-        'corkUtil',
-        function CorkModelSpaceFactory($injector, corkUtil) {
+        'corkDeepExtend',
+        function CorkModelSpaceFactory($injector, corkDeepExtend) {
 
             /**
              * @type {object} default configuration
@@ -490,7 +488,7 @@
             var CorkModelSpace = function (config) {
                 var self = this;
 
-                config = corkUtil.extend(copy(defaults), config || {});
+                config = corkDeepExtend(copy(defaults), config || {});
 
                 /**
                  * @type {object} stores model factories

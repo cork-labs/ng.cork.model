@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var module = angular.module('ng.cork.model.space', ['ng.cork.util']);
+    var module = angular.module('ng.cork.model.space', ['ng.cork.deep.extend']);
 
     var copy = angular.copy;
 
@@ -19,8 +19,8 @@
      */
     module.factory('CorkModelSpace', [
         '$injector',
-        'corkUtil',
-        function CorkModelSpaceFactory($injector, corkUtil) {
+        'corkDeepExtend',
+        function CorkModelSpaceFactory($injector, corkDeepExtend) {
 
             /**
              * @type {object} default configuration
@@ -30,7 +30,7 @@
             var CorkModelSpace = function (config) {
                 var self = this;
 
-                config = corkUtil.extend(copy(defaults), config || {});
+                config = corkDeepExtend(copy(defaults), config || {});
 
                 /**
                  * @type {object} stores model factories
