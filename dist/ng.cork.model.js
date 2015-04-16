@@ -1,5 +1,5 @@
 /**
- * ng.cork.model - v0.0.3 - 2015-04-02
+ * ng.cork.model - v0.0.4 - 2015-04-16
  * https://github.com/cork-labs/ng.cork.model
  *
  * Copyright (c) 2015 Cork Labs <http://cork-labs.org>
