@@ -1,6 +1,6 @@
 {
   "name": "ng.cork.model",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "AngularJS services and classes for complex model layers.",
   "author": {
     "name": "Cork Labs",
